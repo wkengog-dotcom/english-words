@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>英単語ニュアンス図鑑｜中学2年生向け</title>
+  <style>
+    :root {
+      --pink:#ff6fa3;
+      --blue:#5aa9ff;
+      --yellow:#fff3b8;
+      --mint:#c9f7e5;
+      --lav:#eee3ff;
+      --ink:#333;
+      --soft:#fff8fb;
+      --line:#f4c8da;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Hiragino Maru Gothic ProN", "Yu Gothic", "Meiryo", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 10%, #ffe3ef 0 16%, transparent 17%),
+        radial-gradient(circle at 90% 5%, #e4f3ff 0 15%, transparent 16%),
+        linear-gradient(180deg, #fffafe, #f6fbff);
+      line-height: 1.75;
+    }
+    header {
+      padding: 34px 18px 24px;
+      text-align: center;
+    }
+    .title {
+      display: inline-block;
+      padding: 14px 24px;
+      border-radius: 999px;
+      background: white;
+      box-shadow: 0 10px 30px rgba(255,111,163,.22);
+      border: 3px solid #ffd3e3;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 5vw, 46px);
+      letter-spacing: .04em;
+    }
+    .lead {
+      max-width: 850px;
+      margin: 18px auto 0;
+      background: rgba(255,255,255,.78);
+      border-radius: 22px;
+      padding: 14px 18px;
+      border: 2px dashed #ffd0df;
+    }
+    main {
+      width: min(1120px, calc(100% - 28px));
+      margin: 0 auto 60px;
+    }
+    .toolbar {
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin: 18px 0;
+    }
+    .search {
+      flex:1 1 280px;
+      padding: 14px 16px;
+      border-radius: 999px;
+      border: 2px solid #ffd0df;
+      font-size: 16px;
+      background: white;
+      outline: none;
+    }
+    .note {
+      background: var(--yellow);
+      border: 2px solid #ffe083;
+      border-radius: 18px;
+      padding: 10px 14px;
+      font-weight: 700;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .card {
+      position: relative;
+      background: rgba(255,255,255,.94);
+      border: 2px solid var(--line);
+      border-radius: 26px;
+      padding: 20px;
+      box-shadow: 0 12px 22px rgba(122,93,119,.12);
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 28px rgba(122,93,119,.18);
+    }
+    .badge {
+      position:absolute;
+      top: -12px;
+      right: 16px;
+      background: linear-gradient(135deg, var(--pink), #ff9ec0);
+      color:white;
+      border-radius:999px;
+      padding:4px 12px;
+      font-size: 13px;
+      font-weight:700;
+      box-shadow: 0 5px 12px rgba(255,111,163,.28);
+    }
+    h2 {
+      margin: 34px 0 12px;
+      padding-left: 12px;
+      border-left: 8px solid var(--pink);
+      font-size: 24px;
+    }
+    h3 {
+      margin: 6px 0 4px;
+      font-size: 24px;
+      color: #2877c9;
+    }
+    .jp {
+      margin: 0 0 8px;
+      color: #ef5f91;
+      font-weight: 700;
+    }
+    .card p { margin: 8px 0 16px; }
+    button {
+      cursor: pointer;
+      border: 0;
+      border-radius: 999px;
+      padding: 11px 18px;
+      font-weight: 800;
+      color: white;
+      background: linear-gradient(135deg, var(--pink), var(--blue));
+      box-shadow: 0 8px 16px rgba(90,169,255,.25);
+      font-size: 15px;
+    }
+    button:active { transform: translateY(1px); }
+    .table-wrap {
+      overflow-x:auto;
+      background:white;
+      border-radius: 24px;
+      border: 2px solid #d7eaff;
+      box-shadow: 0 12px 22px rgba(90,169,255,.12);
+    }
+    table {
+      width:100%;
+      border-collapse: collapse;
+      min-width: 780px;
+    }
+    th, td {
+      padding: 13px 14px;
+      border-bottom: 1px solid #edf1f7;
+      text-align: left;
+      vertical-align: middle;
+    }
+    th {
+      background: #eaf5ff;
+      color:#1766a8;
+      white-space: nowrap;
+    }
+    td span { color:#777; font-size: 14px; }
+    .table-btn { padding: 8px 14px; }
+    .modal {
+      display:none;
+      position: fixed;
+      inset: 0;
+      background: rgba(40,35,50,.72);
+      z-index: 20;
+      padding: 24px;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal.open { display:flex; }
+    .modal-inner {
+      width:min(1180px, 100%);
+      max-height: 94vh;
+      background:white;
+      border-radius: 24px;
+      padding: 14px;
+      box-shadow: 0 20px 70px rgba(0,0,0,.28);
+    }
+    .modal-head {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 12px;
+      padding: 4px 6px 12px;
+    }
+    .modal-title {
+      font-weight:900;
+      color:#ef5f91;
+      font-size:20px;
+    }
+    .close {
+      background:#444;
+      box-shadow:none;
+      padding: 8px 14px;
+    }
+    .modal img {
+      width:100%;
+      max-height: calc(94vh - 84px);
+      object-fit: contain;
+      border-radius: 16px;
+      background:#fff;
+      display:block;
+    }
+    footer {
+      text-align:center;
+      color:#777;
+      padding: 26px 14px 40px;
+    }
+    @media (max-width: 640px) {
+      header { padding-top: 22px; }
+      .title { padding: 10px 16px; }
+      .card { border-radius: 20px; }
+      .modal { padding: 8px; }
+      .modal-inner { border-radius: 18px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="title">
+      <h1>英単語ニュアンス図鑑</h1>
+    </div>
+    <p class="lead">中学2年生向けに、似ている英単語の違いをイラストで楽しく確認できます。カードや表の「イラストを見る」を押すと、大きな画像が表示されます。</p>
+  </header>
+
+  <main>
+    <div class="toolbar">
+      <input class="search" id="search" type="search" placeholder="単語を検索 例：look / work / 家">
+      <div class="note">ログイン不要で閲覧できます</div>
+    </div>
+
+    <section class="grid" id="cards">
+      
+      <article class="card" data-keywords="eat / have 「食べる」の違い">
+        <div class="badge">基本</div>
+        <h3>eat / have</h3>
+        <p class="jp">「食べる」の違い</p>
+        <p>eat は食べる動作、have は食事全体を表します。</p>
+        <button type="button" onclick="openImage('images/eat-have.png', 'eat / have')">イラストを見る</button>
+      </article>
+    
+      <article class="card" data-keywords="look / watch / see 「見る」の違い">
+        <div class="badge">重要</div>
+        <h3>look / watch / see</h3>
+        <p class="jp">「見る」の違い</p>
+        <p>look は意識して見る、watch は動くものを見る、see は自然に見える。</p>
+        <button type="button" onclick="openImage('images/look-watch-see.png', 'look / watch / see')">イラストを見る</button>
+      </article>
+    
+      <article class="card" data-keywords="speak / talk / say / tell 「話す・言う」の違い">
+        <div class="badge">重要</div>
+        <h3>speak / talk / say / tell</h3>
+        <p class="jp">「話す・言う」の違い</p>
+        <p>speak は言語、talk は会話、say は内容、tell は人に伝える。</p>
+        <button type="button" onclick="openImage('images/speak-talk-say-tell.png', 'speak / talk / say / tell')">イラストを見る</button>
+      </article>
+    
+      <article class="card" data-keywords="hear / listen 「聞く」の違い">
+        <div class="badge">基本</div>
+        <h3>hear / listen</h3>
+        <p class="jp">「聞く」の違い</p>
+        <p>hear は自然に聞こえる、listen は意識して聞く。</p>
+        <button type="button" onclick="openImage('images/hear-listen.png', 'hear / listen')">イラストを見る</button>
+      </article>
+    
+      <article class="card" data-keywords="house / home 「家」の違い">
+        <div class="badge">基本</div>
+        <h3>house / home</h3>
+        <p class="jp">「家」の違い</p>
+        <p>house は建物、home は自分の居場所や心が落ち着く場所。</p>
+        <button type="button" onclick="openImage('images/house-home.png', 'house / home')">イラストを見る</button>
+      </article>
+    
+      <article class="card" data-keywords="borrow / lend 「借りる・貸す」の違い">
+        <div class="badge">重要</div>
+        <h3>borrow / lend</h3>
+        <p class="jp">「借りる・貸す」の違い</p>
+        <p>borrow は相手から借りる、lend は相手に貸す。</p>
+        <button type="button" onclick="openImage('images/borrow-lend.png', 'borrow / lend')">イラストを見る</button>
+      </article>
+    
+      <article class="card" data-keywords="trip / travel / journey 「旅行・旅」の違い">
+        <div class="badge">発展</div>
+        <h3>trip / travel / journey</h3>
+        <p class="jp">「旅行・旅」の違い</p>
+        <p>trip は短い旅行、travel は旅行全般、journey は道のりや旅の過程。</p>
+        <button type="button" onclick="openImage('images/trip-travel-journey.png', 'trip / travel / journey')">イラストを見る</button>
+      </article>
+    
+      <article class="card" data-keywords="big / large 「大きい」の違い">
+        <div class="badge">発展</div>
+        <h3>big / large</h3>
+        <p class="jp">「大きい」の違い</p>
+        <p>big は日常的な大きさ、large は広さや規模の大きさ。</p>
+        <button type="button" onclick="openImage('images/big-large.png', 'big / large')">イラストを見る</button>
+      </article>
+    
+      <article class="card" data-keywords="like / love 「好き」の違い">
+        <div class="badge">基本</div>
+        <h3>like / love</h3>
+        <p class="jp">「好き」の違い</p>
+        <p>like はふつうの好き、love はとても強い好き。</p>
+        <button type="button" onclick="openImage('images/like-love.png', 'like / love')">イラストを見る</button>
+      </article>
+    
+      <article class="card" data-keywords="start / begin 「始める」の違い">
+        <div class="badge">発展</div>
+        <h3>start / begin</h3>
+        <p class="jp">「始める」の違い</p>
+        <p>start は動き出す感じ、begin は物事の最初を始める感じ。</p>
+        <button type="button" onclick="openImage('images/start-begin.png', 'start / begin')">イラストを見る</button>
+      </article>
+    
+      <article class="card" data-keywords="have / has 「持っている」の違い">
+        <div class="badge">基本</div>
+        <h3>have / has</h3>
+        <p class="jp">「持っている」の違い</p>
+        <p>have は I・you・we・they、has は he・she・it に使います。</p>
+        <button type="button" onclick="openImage('images/have-has.png', 'have / has')">イラストを見る</button>
+      </article>
+    
+      <article class="card" data-keywords="job / work 「仕事」の違い">
+        <div class="badge">重要</div>
+        <h3>job / work</h3>
+        <p class="jp">「仕事」の違い</p>
+        <p>job は職業や役割、work は働くことや作業全体。</p>
+        <button type="button" onclick="openImage('images/job-work.png', 'job / work')">イラストを見る</button>
+      </article>
+    
+      <article class="card" data-keywords="clever / smart 「頭がいい」の違い">
+        <div class="badge">発展</div>
+        <h3>clever / smart</h3>
+        <p class="jp">「頭がいい」の違い</p>
+        <p>clever は機転がきく、smart は知識や理解力が高い。</p>
+        <button type="button" onclick="openImage('images/clever-smart.png', 'clever / smart')">イラストを見る</button>
+      </article>
+    
+    </section>
+
+    <h2>一覧表</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>単語</th>
+            <th>ポイント</th>
+            <th>画像</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+      <tr>
+        <td>1</td>
+        <td><strong>eat / have</strong><br><span>「食べる」の違い</span></td>
+        <td>eat は食べる動作、have は食事全体を表します。</td>
+        <td><button type="button" class="table-btn" onclick="openImage('images/eat-have.png', 'eat / have')">見る</button></td>
+      </tr>
+    
+      <tr>
+        <td>2</td>
+        <td><strong>look / watch / see</strong><br><span>「見る」の違い</span></td>
+        <td>look は意識して見る、watch は動くものを見る、see は自然に見える。</td>
+        <td><button type="button" class="table-btn" onclick="openImage('images/look-watch-see.png', 'look / watch / see')">見る</button></td>
+      </tr>
+    
+      <tr>
+        <td>3</td>
+        <td><strong>speak / talk / say / tell</strong><br><span>「話す・言う」の違い</span></td>
+        <td>speak は言語、talk は会話、say は内容、tell は人に伝える。</td>
+        <td><button type="button" class="table-btn" onclick="openImage('images/speak-talk-say-tell.png', 'speak / talk / say / tell')">見る</button></td>
+      </tr>
+    
+      <tr>
+        <td>4</td>
+        <td><strong>hear / listen</strong><br><span>「聞く」の違い</span></td>
+        <td>hear は自然に聞こえる、listen は意識して聞く。</td>
+        <td><button type="button" class="table-btn" onclick="openImage('images/hear-listen.png', 'hear / listen')">見る</button></td>
+      </tr>
+    
+      <tr>
+        <td>5</td>
+        <td><strong>house / home</strong><br><span>「家」の違い</span></td>
+        <td>house は建物、home は自分の居場所や心が落ち着く場所。</td>
+        <td><button type="button" class="table-btn" onclick="openImage('images/house-home.png', 'house / home')">見る</button></td>
+      </tr>
+    
+      <tr>
+        <td>6</td>
+        <td><strong>borrow / lend</strong><br><span>「借りる・貸す」の違い</span></td>
+        <td>borrow は相手から借りる、lend は相手に貸す。</td>
+        <td><button type="button" class="table-btn" onclick="openImage('images/borrow-lend.png', 'borrow / lend')">見る</button></td>
+      </tr>
+    
+      <tr>
+        <td>7</td>
+        <td><strong>trip / travel / journey</strong><br><span>「旅行・旅」の違い</span></td>
+        <td>trip は短い旅行、travel は旅行全般、journey は道のりや旅の過程。</td>
+        <td><button type="button" class="table-btn" onclick="openImage('images/trip-travel-journey.png', 'trip / travel / journey')">見る</button></td>
+      </tr>
+    
+      <tr>
+        <td>8</td>
+        <td><strong>big / large</strong><br><span>「大きい」の違い</span></td>
+        <td>big は日常的な大きさ、large は広さや規模の大きさ。</td>
+        <td><button type="button" class="table-btn" onclick="openImage('images/big-large.png', 'big / large')">見る</button></td>
+      </tr>
+    
+      <tr>
+        <td>9</td>
+        <td><strong>like / love</strong><br><span>「好き」の違い</span></td>
+        <td>like はふつうの好き、love はとても強い好き。</td>
+        <td><button type="button" class="table-btn" onclick="openImage('images/like-love.png', 'like / love')">見る</button></td>
+      </tr>
+    
+      <tr>
+        <td>10</td>
+        <td><strong>start / begin</strong><br><span>「始める」の違い</span></td>
+        <td>start は動き出す感じ、begin は物事の最初を始める感じ。</td>
+        <td><button type="button" class="table-btn" onclick="openImage('images/start-begin.png', 'start / begin')">見る</button></td>
+      </tr>
+    
+      <tr>
+        <td>11</td>
+        <td><strong>have / has</strong><br><span>「持っている」の違い</span></td>
+        <td>have は I・you・we・they、has は he・she・it に使います。</td>
+        <td><button type="button" class="table-btn" onclick="openImage('images/have-has.png', 'have / has')">見る</button></td>
+      </tr>
+    
+      <tr>
+        <td>12</td>
+        <td><strong>job / work</strong><br><span>「仕事」の違い</span></td>
+        <td>job は職業や役割、work は働くことや作業全体。</td>
+        <td><button type="button" class="table-btn" onclick="openImage('images/job-work.png', 'job / work')">見る</button></td>
+      </tr>
+    
+      <tr>
+        <td>13</td>
+        <td><strong>clever / smart</strong><br><span>「頭がいい」の違い</span></td>
+        <td>clever は機転がきく、smart は知識や理解力が高い。</td>
+        <td><button type="button" class="table-btn" onclick="openImage('images/clever-smart.png', 'clever / smart')">見る</button></td>
+      </tr>
+    
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <div class="modal" id="modal" onclick="closeImage(event)">
+    <div class="modal-inner">
+      <div class="modal-head">
+        <div class="modal-title" id="modalTitle">イラスト</div>
+        <button class="close" type="button" onclick="hideModal()">閉じる</button>
+      </div>
+      <img id="modalImage" src="" alt="">
+    </div>
+  </div>
+
+  <footer>
+    英語の似ている単語を、イメージで覚えるための学習ページです。
+  </footer>
+
+  <script>
+    function openImage(src, title) {
+      const modal = document.getElementById('modal');
+      const image = document.getElementById('modalImage');
+      document.getElementById('modalTitle').textContent = title;
+      image.src = src;
+      image.alt = title;
+      modal.classList.add('open');
+    }
+    function hideModal() {
+      document.getElementById('modal').classList.remove('open');
+    }
+    function closeImage(event) {
+      if (event.target.id === 'modal') hideModal();
+    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') hideModal();
+    });
+    document.getElementById('search').addEventListener('input', function(e) {
+      const word = e.target.value.trim().toLowerCase();
+      document.querySelectorAll('.card').forEach(card => {
+        card.style.display = card.dataset.keywords.includes(word) ? '' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>
